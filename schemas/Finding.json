@@ -1,0 +1,42 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "title": {
+      "maxLength": 300,
+      "title": "Title",
+      "type": "string"
+    },
+    "observation": {
+      "maxLength": 3000,
+      "title": "Observation",
+      "type": "string"
+    },
+    "hypothesis": {
+      "default": "",
+      "maxLength": 3000,
+      "title": "Hypothesis",
+      "type": "string"
+    },
+    "citations": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 16,
+      "title": "Citations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "title",
+    "observation",
+    "citations"
+  ],
+  "title": "Finding",
+  "type": "object"
+}

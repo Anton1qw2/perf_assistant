@@ -1,0 +1,30 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "outcome": {
+      "default": "unknown",
+      "enum": [
+        "pass",
+        "fail",
+        "unknown",
+        "not_applicable",
+        "skipped"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "reason": {
+      "default": "not_checked",
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "title": "Stage",
+  "type": "object"
+}

@@ -30,15 +30,22 @@ def main():
         print("Schemas match." if args.check else "Schemas exported.")
         return
     config = Config.from_env()
-    if args.command == 'serve':
+    if args.command == "serve":
         import os
         import subprocess
         import sys
         import time
-        flags = subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
-        processes = [subprocess.Popen([sys.executable, '-m', 'performance_assistant', name], creationflags=flags)
-                     for name in ('api', 'worker')]
-        print(f'Performance Assistant: http://127.0.0.1:{config.port} — Ctrl+C to stop both processes.')
+
+        flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+        processes = [
+            subprocess.Popen(
+                [sys.executable, "-m", "performance_assistant", name], creationflags=flags
+            )
+            for name in ("api", "worker")
+        ]
+        print(
+            f"Performance Assistant: http://127.0.0.1:{config.port} — Ctrl+C to stop both processes."
+        )
         try:
             while all(p.poll() is None for p in processes):
                 time.sleep(0.5)

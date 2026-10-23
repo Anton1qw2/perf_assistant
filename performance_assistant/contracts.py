@@ -197,7 +197,7 @@ class ConsultationReply(Contract):
 
 
 class Routing(Contract):
-    intent: Literal['task', 'mixed', 'consultation', 'capabilities', 'dialogue', 'diagnostics']
+    intent: Literal["task", "mixed", "consultation", "capabilities", "dialogue", "diagnostics"]
     has_task_intent: bool = False
 
 

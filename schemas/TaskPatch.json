@@ -1,0 +1,190 @@
+{
+  "$defs": {
+    "Options": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "metrics": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Metrics",
+          "type": "array"
+        },
+        "source_paths": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 8,
+          "title": "Source Paths",
+          "type": "array"
+        },
+        "hotspots": {
+          "default": 3,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Hotspots",
+          "type": "integer"
+        },
+        "active_seconds": {
+          "default": 180,
+          "maximum": 600,
+          "minimum": 10,
+          "title": "Active Seconds",
+          "type": "integer"
+        },
+        "executor": {
+          "default": "analysis",
+          "enum": [
+            "analysis",
+            "external"
+          ],
+          "title": "Executor",
+          "type": "string"
+        },
+        "required_ranges": {
+          "items": {
+            "$ref": "#/$defs/SourceRange"
+          },
+          "maxItems": 8,
+          "title": "Required Ranges",
+          "type": "array"
+        }
+      },
+      "title": "Options",
+      "type": "object"
+    },
+    "SourceRange": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "path": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 1,
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "minimum": 1,
+          "title": "End",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "start",
+        "end"
+      ],
+      "title": "SourceRange",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "expected_version": {
+      "title": "Expected Version",
+      "type": "integer"
+    },
+    "summary": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Summary"
+    },
+    "repository": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Repository"
+    },
+    "ref": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ref"
+    },
+    "profile_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Profile Id"
+    },
+    "options": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Options"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "open_questions": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Open Questions"
+    }
+  },
+  "required": [
+    "expected_version"
+  ],
+  "title": "TaskPatch",
+  "type": "object"
+}

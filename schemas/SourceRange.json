@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "path": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Path",
+      "type": "string"
+    },
+    "start": {
+      "minimum": 1,
+      "title": "Start",
+      "type": "integer"
+    },
+    "end": {
+      "minimum": 1,
+      "title": "End",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "path",
+    "start",
+    "end"
+  ],
+  "title": "SourceRange",
+  "type": "object"
+}

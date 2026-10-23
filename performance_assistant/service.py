@@ -212,7 +212,7 @@ class Service:
                         "limitations": [],
                         "calls": checkpoint.get("calls", 0),
                     }
-                    for key in ('source_reads', 'planning_rounds', 'external_step'):
+                    for key in ("source_reads", "planning_rounds", "external_step"):
                         if key in checkpoint:
                             fresh[key] = checkpoint[key]
                     db.execute(
@@ -232,10 +232,14 @@ class Service:
 
     def intake(self, cid, request_id, text):
         text = self.vault.scrub(text)
-        previous = self.store.one('SELECT * FROM requests WHERE conversation_id=? AND request_id=?', (cid, request_id))
+        previous = self.store.one(
+            "SELECT * FROM requests WHERE conversation_id=? AND request_id=?", (cid, request_id)
+        )
         if previous:
-            result = json.loads(previous['result'])
-            if previous['fingerprint'] == digest({'type':'answer', 'question_id':result.get('id'), 'answer':text}):
+            result = json.loads(previous["result"])
+            if previous["fingerprint"] == digest(
+                {"type": "answer", "question_id": result.get("id"), "answer": text}
+            ):
                 return result
         pending = self.store.one(
             "SELECT q.id FROM questions q JOIN runs r ON r.id=q.run_id WHERE r.conversation_id=? AND r.status='waiting' AND q.answer IS NULL ORDER BY q.created LIMIT 1",
@@ -273,8 +277,8 @@ class Service:
             ).fetchone():
                 raise Conflict("answer_pending_question_first")
             old_context = json.loads(run["context"])
-            if old_context['revision'] >= 16:
-                raise Conflict('context_revision_limit')
+            if old_context["revision"] >= 16:
+                raise Conflict("context_revision_limit")
             if context.revision != old_context["revision"]:
                 raise Conflict("context_version_conflict")
             TaskSpec(profile_id=context.profile_id)

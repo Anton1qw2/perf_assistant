@@ -79,15 +79,24 @@ class Worker:
     def intake(self, job, payload, deadline):
         cid = job["conversation_id"]
         snap = self.store.snapshot(cid)
-        pending = self.store.one("SELECT * FROM consultations WHERE conversation_id=? AND status='pending' ORDER BY created DESC LIMIT 1", (cid,))
-        explicit_switch = payload['text'].startswith('/') or classify(payload['text']) in ('diagnostics', 'capabilities', 'task')
+        pending = self.store.one(
+            "SELECT * FROM consultations WHERE conversation_id=? AND status='pending' ORDER BY created DESC LIMIT 1",
+            (cid,),
+        )
+        explicit_switch = payload["text"].startswith("/") or classify(payload["text"]) in (
+            "diagnostics",
+            "capabilities",
+            "task",
+        )
         if pending and not explicit_switch:
-            classification = 'consultation'
+            classification = "consultation"
         else:
-            classification = route(payload['text'], TaskSpec.model_validate(snap['task']), self.model, deadline)
+            classification = route(
+                payload["text"], TaskSpec.model_validate(snap["task"]), self.model, deadline
+            )
         patch = None
         followup = None
-        if classification in ('task', 'mixed'):
+        if classification in ("task", "mixed"):
             updates = prepare(
                 payload["text"], TaskSpec.model_validate(snap["task"]), self.model, deadline
             )
@@ -95,26 +104,46 @@ class Worker:
             reply = (
                 "Задача подготовлена. Проверьте цель и параметры; исследование начнётся после Run."
             )
-            if classification == 'mixed':
-                reply += '\n\n'+respond(payload['text'], 'consultation', self.model, deadline)
+            if classification == "mixed":
+                reply += "\n\n" + respond(payload["text"], "consultation", self.model, deadline)
         elif classification == "diagnostics":
             reply = "Проверка подключений поставлена в очередь."
-        elif classification == 'consultation':
-            result = consultation(payload['text'], self.model, deadline, pending['prompt'] if pending and not explicit_switch else None)
+        elif classification == "consultation":
+            result = consultation(
+                payload["text"],
+                self.model,
+                deadline,
+                pending["prompt"] if pending and not explicit_switch else None,
+            )
             reply, followup = result.text, result.question
             if followup:
-                reply += '\n\n'+followup
+                reply += "\n\n" + followup
         else:
             reply = respond(payload["text"], classification, self.model, deadline)
         deadline.remaining()
         with self.store.owned(job) as db:
             row = self.service.conversation(db, cid)
             if pending:
-                db.execute('UPDATE consultations SET answer=?,status=? WHERE id=?',
-                           (payload['text'] if not explicit_switch else None, 'answered' if not explicit_switch else 'superseded', pending['id']))
+                db.execute(
+                    "UPDATE consultations SET answer=?,status=? WHERE id=?",
+                    (
+                        payload["text"] if not explicit_switch else None,
+                        "answered" if not explicit_switch else "superseded",
+                        pending["id"],
+                    ),
+                )
             if followup:
-                db.execute('INSERT INTO consultations VALUES(?,?,?,?,?,?)',
-                           (payload['message_id']+':consult', cid, followup, None, 'pending', time.time()))
+                db.execute(
+                    "INSERT INTO consultations VALUES(?,?,?,?,?,?)",
+                    (
+                        payload["message_id"] + ":consult",
+                        cid,
+                        followup,
+                        None,
+                        "pending",
+                        time.time(),
+                    ),
+                )
             if patch:
                 try:
                     task = patch_task(TaskSpec.model_validate_json(row["task"]), patch)

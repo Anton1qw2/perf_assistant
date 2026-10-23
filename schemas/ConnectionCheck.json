@@ -1,0 +1,95 @@
+{
+  "$defs": {
+    "Stage": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "outcome": {
+          "default": "unknown",
+          "enum": [
+            "pass",
+            "fail",
+            "unknown",
+            "not_applicable",
+            "skipped"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "reason": {
+          "default": "not_checked",
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "title": "Stage",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "source": {
+      "enum": [
+        "profiler",
+        "git",
+        "docs"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "revision": {
+      "title": "Revision",
+      "type": "integer"
+    },
+    "scope": {
+      "title": "Scope",
+      "type": "string"
+    },
+    "stages": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Stage"
+      },
+      "title": "Stages",
+      "type": "object"
+    },
+    "checked_at": {
+      "title": "Checked At",
+      "type": "number"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "number"
+    },
+    "synthetic": {
+      "default": false,
+      "title": "Synthetic",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "source",
+    "revision",
+    "scope",
+    "stages",
+    "checked_at",
+    "expires_at"
+  ],
+  "title": "ConnectionCheck",
+  "type": "object"
+}

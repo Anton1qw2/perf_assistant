@@ -1,0 +1,62 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "clarification",
+        "context_confirmation",
+        "external"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "owner": {
+      "title": "Owner",
+      "type": "string"
+    },
+    "prompt": {
+      "title": "Prompt",
+      "type": "string"
+    },
+    "expected": {
+      "default": "text",
+      "title": "Expected",
+      "type": "string"
+    },
+    "continuation": {
+      "title": "Continuation",
+      "type": "string"
+    },
+    "answer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Answer"
+    }
+  },
+  "required": [
+    "id",
+    "kind",
+    "owner",
+    "prompt",
+    "continuation"
+  ],
+  "title": "Question",
+  "type": "object"
+}

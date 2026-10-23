@@ -1,0 +1,111 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "title": {
+          "maxLength": 300,
+          "title": "Title",
+          "type": "string"
+        },
+        "observation": {
+          "maxLength": 3000,
+          "title": "Observation",
+          "type": "string"
+        },
+        "hypothesis": {
+          "default": "",
+          "maxLength": 3000,
+          "title": "Hypothesis",
+          "type": "string"
+        },
+        "citations": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 16,
+          "title": "Citations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "observation",
+        "citations"
+      ],
+      "title": "Finding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "report_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Report Version",
+      "type": "integer"
+    },
+    "scope": {
+      "title": "Scope",
+      "type": "string"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "maxItems": 16,
+      "title": "Findings",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 32,
+      "title": "Limitations",
+      "type": "array"
+    },
+    "analysis_completed": {
+      "default": true,
+      "title": "Analysis Completed",
+      "type": "boolean"
+    },
+    "correctness": {
+      "default": "unknown",
+      "enum": [
+        "unknown",
+        "passed",
+        "failed"
+      ],
+      "title": "Correctness",
+      "type": "string"
+    },
+    "measured_improvement": {
+      "default": "unknown",
+      "enum": [
+        "unknown",
+        "improved",
+        "not_improved"
+      ],
+      "title": "Measured Improvement",
+      "type": "string"
+    }
+  },
+  "required": [
+    "scope"
+  ],
+  "title": "Report",
+  "type": "object"
+}

@@ -1,0 +1,82 @@
+{
+  "$defs": {
+    "PlannedAction": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "tool",
+            "source"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "tool": {
+          "default": "",
+          "maxLength": 128,
+          "title": "Tool",
+          "type": "string"
+        },
+        "arguments": {
+          "additionalProperties": true,
+          "title": "Arguments",
+          "type": "object"
+        },
+        "path": {
+          "default": "",
+          "maxLength": 512,
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "PlannedAction",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "actions": {
+      "items": {
+        "$ref": "#/$defs/PlannedAction"
+      },
+      "maxItems": 4,
+      "title": "Actions",
+      "type": "array"
+    },
+    "question": {
+      "anyOf": [
+        {
+          "maxLength": 2000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Question"
+    },
+    "finish": {
+      "default": false,
+      "title": "Finish",
+      "type": "boolean"
+    }
+  },
+  "title": "Plan",
+  "type": "object"
+}

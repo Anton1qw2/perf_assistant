@@ -273,10 +273,14 @@ class Store:
             result["jobs"] = [
                 dict(x)
                 for x in db.execute(
-                    "SELECT id,kind,status FROM jobs WHERE conversation_id=? AND status IN ('queued','running')",
+                    "SELECT id,kind,status,payload FROM jobs WHERE conversation_id=? AND status IN ('queued','running')",
                     (cid,),
                 )
             ]
+            for job in result["jobs"]:
+                payload = json.loads(job.pop("payload"))
+                if job["kind"] == "diagnostics":
+                    job["sources"] = payload["sources"]
             result["event_id"] = db.execute(
                 "SELECT COALESCE(MAX(id),0) FROM events WHERE conversation_id=?", (cid,)
             ).fetchone()[0]

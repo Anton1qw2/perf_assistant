@@ -305,13 +305,25 @@ class Analysis:
                         raise AdapterError("planned_source_without_repository")
                 if proposal.question:
                     qid = f"{run['id']}:{context['revision']}:plan:{rounds}"
-                    outcome["question"] = Question(
-                        id=qid,
-                        kind="clarification",
-                        owner=run["id"],
-                        prompt=proposal.question,
-                        continuation="replan",
-                    ).model_dump()
+                    existing = self.store.one("SELECT * FROM questions WHERE id=?", (qid,))
+                    outcome["question"] = (
+                        {
+                            "id": existing["id"],
+                            "kind": existing["kind"],
+                            "owner": existing["owner"],
+                            "prompt": existing["prompt"],
+                            "continuation": existing["continuation"],
+                            "answer": existing["answer"],
+                        }
+                        if existing
+                        else Question(
+                            id=qid,
+                            kind="clarification",
+                            owner=run["id"],
+                            prompt=proposal.question,
+                            continuation="replan",
+                        ).model_dump()
+                    )
                     outcome["status"] = "waiting"
                 elif proposal.finish or not proposal.actions:
                     checkpoint["phase"] = "hotspots"

@@ -1,0 +1,33 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "intent": {
+      "enum": [
+        "task",
+        "mixed",
+        "consultation",
+        "capabilities",
+        "dialogue",
+        "diagnostics"
+      ],
+      "title": "Intent",
+      "type": "string"
+    },
+    "has_task_intent": {
+      "default": false,
+      "title": "Has Task Intent",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "intent"
+  ],
+  "title": "Routing",
+  "type": "object"
+}
