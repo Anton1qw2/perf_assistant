@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Performance Assistant</title><link rel="stylesheet" href="/assets/style.css"></head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="/">▥ <span>Performance<br><b>Assistant</b></span></a>
+  <button id="new" class="primary">＋ Новое исследование</button>
+  <div class="nav-label">ИСТОРИЯ</div><nav id="conversations" aria-label="Исследования"></nav>
+  <div class="sidebar-footer"><span class="local-dot"></span> Локальное рабочее пространство<br><small>Данные хранятся на этом устройстве</small></div>
+</aside>
+<main>
+  <header><button id="menu" class="mobile" aria-label="Открыть историю">☰</button><div><div class="eyebrow">PERFORMANCE WORKBENCH</div><h1>Исследование производительности</h1></div><span class="badge">LOCAL · v0.1</span></header>
+  <div class="connection-bar" aria-label="Состояние подключений"><div id="connections"></div><button id="check-all" class="quiet">Проверить всё ↻</button></div>
+  <div id="notice" role="status" aria-live="polite" hidden></div>
+  <section class="workspace">
+    <section class="chat-column" aria-label="Диалог">
+      <div class="section-head"><span>Диалог</span><span class="muted">Обсуждение → задача → исследование</span></div>
+      <div id="messages" class="messages" aria-live="polite"></div>
+      <section id="execution" class="execution" hidden><div><strong>Ход исследования</strong><button id="copy" class="quiet">Копировать всё</button></div><pre id="execution-text"></pre></section>
+      <form id="chat-form"><label for="draft" class="sr-only">Сообщение</label><textarea id="draft" rows="3" placeholder="Опишите проблему или задайте вопрос…"></textarea><div class="composer-bottom"><span>/task · /ask · /check</span><button type="submit" class="primary" id="send">Отправить ↑</button></div></form>
+      <p class="footnote">Обсуждение не запускает анализ. Не вставляйте токены в сообщения.</p>
+    </section>
+    <aside class="inspector">
+      <details open><summary>Согласованная задача <span id="task-version"></span></summary>
+        <form id="task-form"><label>Краткое описание<textarea id="summary" rows="4" placeholder="Что требуется исследовать?"></textarea></label>
+        <div class="field-row"><label>Profile ID<input id="task-profile" placeholder="result-123"></label><label>Git ref<input id="task-ref" value="HEAD"></label></div>
+        <label>Локальный Git-репозиторий<input id="task-repo" placeholder="C:\projects\my-app"></label>
+        <label>Файлы исходного кода <small>по одному на строку</small><textarea id="source-paths" rows="2" placeholder="src/main.py"></textarea></label>
+        <label>Открытые вопросы <small>пусто, если согласовано</small><textarea id="open-questions" rows="2"></textarea></label>
+        <div class="field-row"><label>Бюджет, секунд<input id="budget" type="number" min="10" max="600" value="180"></label><label>Исполнитель<select id="executor"><option value="analysis">Исследование</option><option value="external">Внешний read-only</option></select></label></div>
+        <button type="submit" class="secondary full">Сохранить задачу</button></form>
+        <p id="readiness" class="hint"></p><div class="actions"><button id="run" class="primary">▶ Run</button><button id="cancel" class="quiet">Остановить</button></div>
+        <div class="actions"><button id="change-context" class="secondary full" disabled title="Предложить профиль и Git из полей выше для активного запуска. Потребуется подтверждение в чате.">Сменить контекст запуска…</button></div>
+      </details>
+      <details><summary>Настройки подключения</summary><p class="hint">Выбор для диагностики. Адрес MCP и разрешённые инструменты задаются в .env.</p>
+        <form id="settings-form"><label>Profile ID<input id="settings-profile"></label><label>Git-репозиторий<input id="settings-repo"></label><label>Git ref<input id="settings-ref" value="HEAD"></label><label>Токен MCP <small>хранится зашифрованным</small><input id="token" type="password" autocomplete="new-password" placeholder="Не изменять"></label><label class="checkbox"><input type="checkbox" id="clear-token"> Удалить привязку токена</label><button class="secondary full">Сохранить настройки</button></form>
+      </details>
+      <details><summary>Свидетельства и отчёты</summary><div id="evidence"><p class="hint">Появятся после запуска исследования.</p></div></details>
+      <div class="principle"><span>◎</span><p>Выводы опираются на свидетельства.<br><small>Завершение анализа не означает измеренное ускорение.</small></p></div>
+    </aside>
+  </section>
+</main>
+<dialog id="detail"><div class="dialog-head"><h2 id="detail-title"></h2><button id="close-detail" aria-label="Закрыть">✕</button></div><pre id="detail-body"></pre><button id="recheck" class="primary">Проверить снова</button></dialog>
+<script type="module" src="/assets/app.js"></script>
+</body></html>

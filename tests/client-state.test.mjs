@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {connectionState,acceptSnapshot} from '../performance_assistant/web/state.mjs';
+import {safeLink,inlineTokens} from '../performance_assistant/web/markdown.mjs';
+test('unsafe links and remote images are not rendered',()=>{assert.equal(safeLink('javascript:alert(1)'),null);assert.equal(safeLink('data:text/html,hi'),null);assert.deepEqual(inlineTokens('![x](https://remote/image.png)'),[{kind:'text',text:'[изображение отключено]'}]);});
+test('HTML remains text data',()=>assert.deepEqual(inlineTokens('<script>alert(1)</script>'),[{kind:'text',text:'<script>alert(1)</script>'}]));
+test('expiry means stale, never failed',()=>assert.equal(connectionState({expires_at:1,stages:{}},false,2).kind,'stale'));
+test('public discovery is only partial',()=>assert.equal(connectionState({source:'profiler',expires_at:100,stages:{protocol:{outcome:'pass'},selected_object:{outcome:'unknown'}}},false,1).kind,'partial'));
+test('late response cannot cross conversations',()=>assert.equal(acceptSnapshot(null,{event_id:10},'old','new'),false));
+test('late snapshot cannot replace newer state',()=>assert.equal(acceptSnapshot({event_id:10},{event_id:8},'a','a'),false));
+test('object denied remains failed despite discovery',()=>assert.equal(connectionState({source:'profiler',expires_at:100,stages:{protocol:{outcome:'pass'},selected_object:{outcome:'fail'}}},false,1).kind,'fail'));
